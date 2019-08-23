@@ -6,8 +6,10 @@
   "main": "index.js",
   "scripts": {
     "autod": "autod",
+    "lint": "eslint .",
     "test": "egg-bin test",
     "cov": "egg-bin cov",
+    "ci": "npm run lint && npm run cov",
     "pkgfiles": "egg-bin pkgfiles"
   },
   "repository": {
