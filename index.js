@@ -17,10 +17,6 @@ const argv = process.argv;
 main(process.cwd());
 
 async function main(cwd) {
-  // check eslint file
-  const eslintFile = path.resolve(cwd, '.eslintrc');
-  assert(!(await fs.exists(eslintFile)), `${eslintFile} has exists`);
-
   // check tsconfig
   const tsconfigFile = path.resolve(cwd, 'tsconfig.json');
   assert(await fs.exists(tsconfigFile), `${tsconfigFile} not found`);
@@ -48,6 +44,7 @@ async function main(cwd) {
   await fs.writeFile(path.resolve(cwd, tslintEslintName), JSON.stringify(tsconfigEslint, null, 2));
 
   // create eslint file and migrate rules
+  const eslintFile = path.resolve(cwd, '.eslintrc');
   const eslintConfig = {
     extends: 'eslint-config-egg/typescript',
     parserOptions: {
@@ -59,12 +56,13 @@ async function main(cwd) {
 
   // create eslintignore file
   const eslintignoreFile = path.resolve(cwd, './.eslintignore');
+  const existContentList = (await fs.exists(eslintignoreFile)) ? await fs.readFile(eslintignoreFile, 'utf-8') : '';
   const eslintIgnore = [
-    'dist/**/*',
+    'dist/',
     '**/*.d.ts',
     'node_modules/',
   ].join('\n');
-  await fs.writeFile(eslintignoreFile, eslintIgnore);
+  await fs.writeFile(eslintignoreFile, `${existContentList}\n\n${eslintIgnore}`);
 
   // delete tslint.json
   if (await confirm('Should remove tslint.json?')) {
