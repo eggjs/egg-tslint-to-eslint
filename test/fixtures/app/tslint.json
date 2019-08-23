@@ -1,0 +1,13 @@
+{
+  "extends": "tslint-config-egg",
+  "rules": {
+    "no-var-requires": false,
+    "interface-name": [false],
+    "adjacent-overload-signatures": true,
+    "member-access": [true, "check-accessor"],
+    "member-ordering": [true, { "order": "fields-first" }],
+    "object-literal-sort-keys": false,
+    "no-empty-interface": false,
+    "variable-name": [true, "allow-leading-underscore", "allow-pascal-case"]
+  }
+}
