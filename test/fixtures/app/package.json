@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "lint": "tslint ./test/**/*.ts"
+  },
+  "devDependencies": {
+    "tslint": "^5.19.0",
+    "tslint-config-egg": "^1.0.0"
+  }
+}
