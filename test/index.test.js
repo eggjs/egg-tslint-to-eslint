@@ -32,7 +32,7 @@ describe('test/index.test.js', () => {
 
     // check eslintrc
     const eslintConfig = await getConfig(path.resolve(tmp, '.eslintrc'));
-    assert(eslintConfig.extends === 'eslint-egg-config/typescript');
+    assert(eslintConfig.extends === 'eslint-config-egg/typescript');
     assert(eslintConfig.parserOptions.project === './tsconfig.eslint.json');
     assert(eslintConfig.rules['@typescript-eslint/interface-name-prefix'] === 'off');
     assert(eslintConfig.rules['@typescript-eslint/adjacent-overload-signatures'] === 'off');
@@ -85,7 +85,7 @@ describe('test/index.test.js', () => {
 
     // check eslintrc
     const eslintConfig = await getConfig(path.resolve(tmp, '.eslintrc'));
-    assert(eslintConfig.extends === 'eslint-egg-config/typescript');
+    assert(eslintConfig.extends === 'eslint-config-egg/typescript');
     assert(eslintConfig.parserOptions.project === './tsconfig.eslint.json');
     assert(!eslintConfig.rules);
   });
