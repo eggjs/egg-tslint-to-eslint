@@ -26,6 +26,7 @@
     "autod": "^3.1.0",
     "coffee": "^5.2.2",
     "egg-bin": "^4.13.0",
+    "egg-ci": "^1.13.0",
     "eslint": "^6.2.1",
     "eslint-config-egg": "^7.4.1",
     "runscript": "^1.4.0",
@@ -39,5 +40,11 @@
     "mz": "^2.7.0",
     "mz-modules": "^2.1.0",
     "tslint-to-eslint-config": "^0.2.4"
+  },
+  "engines": {
+    "node": ">= 8.0.0"
+  },
+  "ci": {
+    "version": "8, 10, 12"
   }
 }
