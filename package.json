@@ -1,6 +1,6 @@
 {
   "name": "egg-tslint-to-eslint",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Migrate tslint-config-egg to eslint-config-egg in ts project.",
   "bin": "index.js",
   "main": "index.js",
