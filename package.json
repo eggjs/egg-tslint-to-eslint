@@ -32,7 +32,6 @@
     "egg-ci": "^1.13.0",
     "eslint": "^6.2.1",
     "eslint-config-egg": "^7.4.1",
-    "runscript": "^1.4.0",
     "tslint": "^5.19.0",
     "tslint-config-egg": "^1.0.0"
   },
@@ -42,6 +41,7 @@
     "js-yaml": "^3.13.1",
     "mz": "^2.7.0",
     "mz-modules": "^2.1.0",
+    "runscript": "^1.4.0",
     "tslint-to-eslint-config": "^0.2.4"
   },
   "engines": {

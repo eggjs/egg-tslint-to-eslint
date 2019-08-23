@@ -38,24 +38,33 @@ async function main(cwd) {
   const tslintEslintName = 'tsconfig.eslint.json';
   const tsconfigEslint = {
     extends: './tsconfig.json',
-    include: [ '**/*.ts' ],
+    include: [
+      'app/**/*.ts',
+      'config/**/*.ts',
+      'test/**/*.ts',
+      'src/**/*.ts',
+    ],
   };
   await fs.writeFile(path.resolve(cwd, tslintEslintName), JSON.stringify(tsconfigEslint, null, 2));
 
-  // create eslint file
+  // create eslint file and migrate rules
   const eslintConfig = {
-    extends: 'eslint-egg-config/typescript',
+    extends: 'eslint-config-egg/typescript',
     parserOptions: {
       project: `./${tslintEslintName}`,
     },
   };
-
-  // should migrate rules
-  if (newRules) {
-    eslintConfig.rules = newRules;
-  }
-
+  if (newRules) eslintConfig.rules = newRules;
   await fs.writeFile(eslintFile, JSON.stringify(eslintConfig, null, 2));
+
+  // create eslintignore file
+  const eslintignoreFile = path.resolve(cwd, './.eslintignore');
+  const eslintIgnore = [
+    'dist/**/*',
+    '**/*.d.ts',
+    'node_modules/',
+  ].join('\n');
+  await fs.writeFile(eslintignoreFile, eslintIgnore);
 
   // delete tslint.json
   if (await confirm('Should remove tslint.json?')) {
@@ -104,7 +113,7 @@ function confirm(msg) {
     initial: 'y',
   });
 
-  process.send({ type: 'prompt' });
+  process.send && process.send({ type: 'prompt' });
   return prompt.run();
 }
 
