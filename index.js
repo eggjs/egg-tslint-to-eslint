@@ -52,7 +52,6 @@ async function main(cwd) {
     },
   };
   if (newRules) eslintConfig.rules = newRules;
-  await fs.writeFile(eslintFile, JSON.stringify(eslintConfig, null, 2));
 
   // create eslintignore file
   const eslintignoreFile = path.resolve(cwd, './.eslintignore');
@@ -62,15 +61,15 @@ async function main(cwd) {
     '**/*.d.ts',
     'node_modules/',
   ].join('\n');
-  await fs.writeFile(eslintignoreFile, `${existContentList}\n\n${eslintIgnore}`);
 
   // delete tslint.json
   if (await confirm('Should remove tslint.json?')) {
     await fs.unlink(tslintConfigFile);
   }
 
-  // update vscode setting.json
-  if (await confirm('Should update .vscode/settings?')) {
+  // check vscode
+  if (await confirm('Are you working with vscode?')) {
+    // update vscode setting.json
     const vscodeSettingFile = path.resolve(cwd, './.vscode/settings.json');
     const eslintValidateInfo = [
       'javascript',
@@ -84,6 +83,10 @@ async function main(cwd) {
     vscodeSetting['eslint.validate'] = eslintValidateInfo;
     await mkdirp(path.dirname(vscodeSettingFile));
     await fs.writeFile(vscodeSettingFile, JSON.stringify(vscodeSetting, null, 2));
+
+    // should add createDefaultProgram: true to eslintrc in vscode
+    // @see https://github.com/typescript-eslint/typescript-eslint/issues/864#issuecomment-523213273
+    eslintConfig.parserOptions.createDefaultProgram = true;
   }
 
   // update deps
@@ -98,6 +101,10 @@ async function main(cwd) {
     delete pkgInfo.devDependencies.tslint;
     await fs.writeFile(packageFile, JSON.stringify(pkgInfo, null, 2));
   }
+
+  // write eslint file
+  await fs.writeFile(eslintFile, JSON.stringify(eslintConfig, null, 2));
+  await fs.writeFile(eslintignoreFile, `${existContentList}\n\n${eslintIgnore}`);
 }
 
 function confirm(msg) {
