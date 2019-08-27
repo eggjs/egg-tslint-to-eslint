@@ -1,4 +1,10 @@
 
+1.0.2 / 2019-08-27
+==================
+
+**fixes**
+  * [[`981e3c3`](http://github.com/eggjs/egg-tslint-to-eslint/commit/981e3c33efb2d95466ea0f4fb57acfd69f8ce5b2)] - fix: new file bug in vscode (#3) (吖猩 <<whxaxes@gmail.com>>)
+
 1.0.1 / 2019-08-23
 ==================
 
