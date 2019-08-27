@@ -25,12 +25,7 @@ async function main(cwd) {
   const packageFile = path.resolve(cwd, 'package.json');
   assert(await fs.exists(packageFile), `${packageFile} not found`);
 
-  // load tslint rules and convert to eslint rules
-  const tslintConfigFile = path.resolve(cwd, './tslint.json');
-  const tslintRules = await getTsLintCustomRules(cwd, tslintConfigFile);
-  const newRules = await convertRules(tslintRules);
-
-  // create tsconfig.eslint.json
+  // tsconfig.eslint.json
   const tslintEslintName = 'tsconfig.eslint.json';
   const tsconfigEslint = {
     extends: './tsconfig.json',
@@ -41,49 +36,54 @@ async function main(cwd) {
       'src/**/*.ts',
     ],
   };
-  await fs.writeFile(path.resolve(cwd, tslintEslintName), JSON.stringify(tsconfigEslint, null, 2));
 
-  // create eslint file and migrate rules
+  // eslintrc
   const eslintFile = path.resolve(cwd, '.eslintrc');
   const eslintConfig = {
     extends: 'eslint-config-egg/typescript',
-    parserOptions: {
-      project: `./${tslintEslintName}`,
-    },
+    parserOptions: { project: `./${tslintEslintName}` },
   };
-  if (newRules) eslintConfig.rules = newRules;
-  await fs.writeFile(eslintFile, JSON.stringify(eslintConfig, null, 2));
 
-  // create eslintignore file
+  // eslintignore
   const eslintignoreFile = path.resolve(cwd, './.eslintignore');
   const existContentList = (await fs.exists(eslintignoreFile)) ? await fs.readFile(eslintignoreFile, 'utf-8') : '';
-  const eslintIgnore = [
+  const eslintIgnoreList = [
     'dist/',
     '**/*.d.ts',
     'node_modules/',
-  ].join('\n');
-  await fs.writeFile(eslintignoreFile, `${existContentList}\n\n${eslintIgnore}`);
+  ];
+
+  // vscode/settings
+  const vscodeSettingFile = path.resolve(cwd, './.vscode/settings.json');
+  const eslintValidateInfo = [
+    'javascript',
+    'javascriptreact',
+    { language: 'typescript', autoFix: true },
+    { language: 'typescriptreact', autoFix: true },
+  ];
+
+  // load tslint rules and convert to eslint rules
+  const tslintConfigFile = path.resolve(cwd, './tslint.json');
+  const tslintRules = await getTsLintCustomRules(cwd, tslintConfigFile);
+  const newRules = await convertRules(tslintRules);
+  if (newRules) eslintConfig.rules = newRules;
 
   // delete tslint.json
   if (await confirm('Should remove tslint.json?')) {
     await fs.unlink(tslintConfigFile);
   }
 
-  // update vscode setting.json
-  if (await confirm('Should update .vscode/settings?')) {
-    const vscodeSettingFile = path.resolve(cwd, './.vscode/settings.json');
-    const eslintValidateInfo = [
-      'javascript',
-      'javascriptreact',
-      {
-        language: 'typescript',
-        autoFix: true,
-      },
-    ];
+  // check vscode
+  if (await confirm('Are you working with vscode?')) {
+    // write settings
     const vscodeSetting = await loadConfig(vscodeSettingFile);
     vscodeSetting['eslint.validate'] = eslintValidateInfo;
     await mkdirp(path.dirname(vscodeSettingFile));
     await fs.writeFile(vscodeSettingFile, JSON.stringify(vscodeSetting, null, 2));
+
+    // should add createDefaultProgram: true to eslintrc in vscode
+    // @see https://github.com/typescript-eslint/typescript-eslint/issues/864#issuecomment-523213273
+    eslintConfig.parserOptions.createDefaultProgram = true;
   }
 
   // update deps
@@ -98,6 +98,11 @@ async function main(cwd) {
     delete pkgInfo.devDependencies.tslint;
     await fs.writeFile(packageFile, JSON.stringify(pkgInfo, null, 2));
   }
+
+  // write files
+  await fs.writeFile(path.resolve(cwd, tslintEslintName), JSON.stringify(tsconfigEslint, null, 2));
+  await fs.writeFile(eslintFile, JSON.stringify(eslintConfig, null, 2));
+  await fs.writeFile(eslintignoreFile, `${existContentList}\n\n${eslintIgnoreList.join('\n')}`);
 }
 
 function confirm(msg) {
