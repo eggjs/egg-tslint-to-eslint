@@ -34,6 +34,7 @@ describe('test/index.test.js', () => {
     const eslintConfig = await getConfig(path.resolve(tmp, '.eslintrc'));
     assert(eslintConfig.extends === 'eslint-config-egg/typescript');
     assert(eslintConfig.parserOptions.project === './tsconfig.eslint.json');
+    assert(eslintConfig.parserOptions.createDefaultProgram);
     assert(eslintConfig.rules['@typescript-eslint/interface-name-prefix'] === 'off');
     assert(eslintConfig.rules['@typescript-eslint/adjacent-overload-signatures'] === 'off');
     assert(eslintConfig.rules['@typescript-eslint/member-ordering'] === 'off');
