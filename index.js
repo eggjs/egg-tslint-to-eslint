@@ -10,7 +10,7 @@ const assert = require('assert');
 const chalk = require('chalk').default;
 const runscript = require('runscript');
 const jsYaml = require('js-yaml');
-const { converters } = require('tslint-to-eslint-config/src/rules/converters');
+const { rulesConverters: converters } = require('tslint-to-eslint-config/src/rules/rulesConverters');
 const { convertRule } = require('tslint-to-eslint-config/src/rules/convertRule');
 const argv = process.argv;
 
@@ -92,8 +92,8 @@ async function main(cwd) {
     pkgInfo.scripts = pkgInfo.scripts || {};
     pkgInfo.devDependencies = pkgInfo.devDependencies || {};
     pkgInfo.scripts.lint = 'eslint . --ext .ts';
-    pkgInfo.devDependencies.eslint = '^6.0.0';
-    pkgInfo.devDependencies['eslint-config-egg'] = '^7.0.0';
+    pkgInfo.devDependencies.eslint = '^7.0.0';
+    pkgInfo.devDependencies['eslint-config-egg'] = '^8.0.0';
     delete pkgInfo.devDependencies['tslint-config-egg'];
     delete pkgInfo.devDependencies.tslint;
     await fs.writeFile(packageFile, JSON.stringify(pkgInfo, null, 2));
