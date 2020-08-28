@@ -1,4 +1,10 @@
 
+1.1.0 / 2020-08-28
+==================
+
+**features**
+  * [[`309fdc2`](http://github.com/eggjs/egg-tslint-to-eslint/commit/309fdc295734cda1f7be46b07162348ebb13c6c5)] - feat: upgrade tslint-to-eslint (#4) (吖猩 <<whx89768@alibaba-inc.com>>)
+
 1.0.2 / 2019-08-27
 ==================
 
