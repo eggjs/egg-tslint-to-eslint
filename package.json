@@ -42,7 +42,7 @@
     "mz": "^2.7.0",
     "mz-modules": "^2.1.0",
     "runscript": "^1.4.0",
-    "tslint-to-eslint-config": "^0.2.4"
+    "tslint-to-eslint-config": "^1"
   },
   "engines": {
     "node": ">= 8.0.0"
